@@ -479,7 +479,7 @@ class orderzadmin extends AdminTab
 											left join '._DB_PREFIX_.'tax_lang tl on t.id_tax=tl.id_tax
 											where p.id_product='.$product['product_id'].' and pl.id_lang='.intval($cookie->id_lang);
 									}
-									$product_stock = Db::getInstance()->ExecuteS($product_stock_sql);
+									$product_stock = intval(Db::getInstance()->getValue($product_stock_sql));
 									$c_decimals = (is_array($currency) ? intval($currency['decimals']) : intval($currency->decimals)) * _PS_PRICE_DISPLAY_PRECISION_;
 									if ($product['product_quantity'] > $product['customizationQuantityTotal'])
 									{
@@ -491,7 +491,7 @@ class orderzadmin extends AdminTab
 											<td align="center"><input type="text" onkeyup="check_price(this.value);" size="8" name="product_price['.intval($product['id_order_detail']).']" value="'.$this->ps_round($product['product_price'], $c_decimals).'">('.$currency->sign.')</td>
 											<td align="center" class="productQuantity"><input type="text" onkeyup="check_qty(this.value, '.($product['product_quantity']+$stock['quantity']).');" size="2" name="product_quantity['.intval($product['id_order_detail']).']" value="'.(intval($product['product_quantity']) - $product['customizationQuantityTotal']).'"></td>
 											<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-											<input type="hidden" name="product_stock['.intval($product['id_order_detail']).']" value="'.$product_stock[0]['quantity'].'">
+											<input type="hidden" name="product_stock['.intval($product['id_order_detail']).']" value="'.$product_stock.'">
 											<input type="hidden" name="product_quantity_old['.intval($product['id_order_detail']).']" value="'.$product['product_quantity'].'">
 											<input type="hidden" name="product_tax['.intval($product['id_order_detail']).']" value="'.$product['tax_rate'].'">';
 											if ($product['product_attribute_id'] > 0)
