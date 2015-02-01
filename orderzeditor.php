@@ -20,7 +20,7 @@ class OrderzEditor extends Module
 	{
 		$this->name = 'orderzeditor';
 		$this->tab = 'Tools';
-		$this->version = '1.2.0.0';
+		$this->version = '1.2.0.1';
 
 		parent::__construct();
 
