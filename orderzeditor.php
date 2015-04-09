@@ -16,7 +16,7 @@ class OrderzEditor extends Module
 {
 	private $module_tab = 'orderzadmin';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'orderzeditor';
 		$this->tab = 'Tools';

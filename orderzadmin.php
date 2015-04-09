@@ -46,7 +46,7 @@ class orderzadmin extends AdminTab
 		$statesArray = array();
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
 
-		foreach ($states AS $state)
+		foreach ($states as $state)
 			$statesArray[$state['id_order_state']] = $state['name'];
 
 		$this->fieldsDisplay = array(
@@ -140,11 +140,11 @@ class orderzadmin extends AdminTab
 	{
 		global $_MODULES, $_MODULE, $cookie;
 
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+		$id_lang = (!isset($cookie) || !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
 
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 
-		if ($this->file_exists_cache($file) AND include_once($file))
+		if ($this->file_exists_cache($file) && include_once($file))
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
 		if (!is_array($_MODULES))
@@ -184,12 +184,12 @@ class orderzadmin extends AdminTab
 			$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 			Product::addCustomizationPrice($products, $customizedDatas);
 
-			$html.= ' / ' . $this->l('Edit the order').' № '.$order->id.'</h2>';
+			$html .= ' / '.$this->l('Edit the order').' № '.$order->id.'</h2>';
 
 			if (isset($_GET['st']))
 				$_GET['st'] ? $html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" />'.$this->l('Updated successful.').'</div>' : $html .= '<div class="alert error">'.$this->l('You must fill required data fields.').'</div>';
 
-			$html.= '
+			$html .= '
 				<script type="text/javascript">
 				// <![CDATA[
 					$("document").ready( function(){
@@ -231,27 +231,27 @@ class orderzadmin extends AdminTab
 				AND '._DB_PREFIX_.'hook.name = "payment"
 			');
 
-			foreach($res as $k => $paymod)
+			foreach ($res as $k => $paymod)
 			{
 				$inst = Module::getInstanceByName($paymod['name']);
 				if ($inst)
 					$paymods[$inst->name] = $inst->displayName;
 			}
 
-			$html.= '
+			$html .= '
 				<div style="float: left;">
 					<fieldset style="width: 400px">
 						<legend><img src="../img/admin/details.gif" /> '.$this->l('Order details').'</legend>
 						<form name="details_form" method="post" action="'.$currentIndex.'&back='.$back.'&updateorder&id_order='.$order->id.'&token='.$this->token.'">
 							'.$this->l('Payment mode:').'
 							<select name="payment_module">';
-							foreach($paymods  as $k => $p)
-								$html.= '<option value="'.$k.'|'.$p.'" '.($k==$order->module?'selected="selected"':'').'>'.$p.'</option>';
-							$html.= '
+							foreach ($paymods as $k => $p)
+								$html .= '<option value="'.$k.'|'.$p.'" '.($k==$order->module?'selected="selected"':'').'>'.$p.'</option>';
+							$html .= '
 							</select>
 							<br><br>';
 
-							$html.= '
+							$html .= '
 							<div style="margin: 2px 0 1em 0px;">
 								<table class="table" width="300px;" cellspacing="0" cellpadding="0">
 									<tr><td width="150px;">'.$this->l('Products price inc. tax').'</td><td align="right">'.Tools::displayPrice($order->getTotalProductsWithTaxes($products), $currency, false, false).'</td></tr>
@@ -283,10 +283,10 @@ class orderzadmin extends AdminTab
 			';
 
 			// поместить справа, все что в этом диве
-			$html.= '<div style="float: left; margin-left: 40px">';
+			$html .= '<div style="float: left; margin-left: 40px">';
 
 			/////////////////////////////////// Shipping information //////////////////////////////////////////
-			$html.= '
+			$html .= '
 				<fieldset style="width: 400px">
 					<legend><img src="../img/admin/delivery.gif" /> '.$this->l('Shipping information').'</legend>
 					<form name="carrier_form" method="post" action="'.$currentIndex.'&back='.$back.'&updateorder&id_order='.$order->id.'&token='.$this->token.'">
@@ -294,9 +294,9 @@ class orderzadmin extends AdminTab
 						'.$this->l('Carrier:').'
 						<select name="id_carrier" >';
 							$carriers = $carrier->getCarriers(intval($cookie->id_lang), true);
-							foreach($carriers  as $k=>$c)
-								$html.= '<option value="'.$c['id_carrier'].'" '.($c['id_carrier']==$order->id_carrier?'selected="selected"':'').'>'.$c['name'].'</option>';
-						$html.= '
+							foreach ($carriers as $k=>$c)
+								$html .= '<option value="'.$c['id_carrier'].'" '.($c['id_carrier'] == $order->id_carrier ? 'selected="selected"' : '').'>'.$c['name'].'</option>';
+						$html .= '
 						</select>
 						<br><br>
 						<div class="margin-form">
@@ -307,17 +307,17 @@ class orderzadmin extends AdminTab
 			';
 
 			// конец дива для выравнивания вправо
-			$html.= '</div>';
+			$html .= '</div>';
 
 			////////////////////////////////// Add new product to the order ///////////////////////////////
-			$html.= '
+			$html .= '
 				<br class="clear">
 				<br class="clear">
 				<br class="clear">
 				<form name="search_form" method="post" action="'.$currentIndex.'&updateorder&search_products&id_order='.$order->id.'&token='.$this->token.'&id_lang='.$cookie->id_lang.'">
 					<fieldset style="width: 868px; ">
 						<legend><img src="../img/admin/edit.gif" /> '.$this->l('Add new product(s) to the order').'</legend>';
-						$html.= $this->l('Search product to add').':
+						$html .= $this->l('Search product to add').':
 						<input name="search_txt" type="text" value="" />
 						<input type="submit" value="'.$this->l('   Search   ').'" name="productSearch" class="button" />
 						<br>
@@ -337,7 +337,7 @@ class orderzadmin extends AdminTab
 									{
 										if ($_POST['product_add'])
 										{
-											foreach ($_POST['product_add'] as $id_product=>$v)
+											foreach ($_POST['product_add'] as $id_product => $v)
 											{
 												$result = Db::getInstance()->ExecuteS('select p.*, pl.name, t.rate as tax_rate, tl.name as tax_name from '._DB_PREFIX_.'product p
 													left join '._DB_PREFIX_.'product_lang pl on p.id_product=pl.id_product
@@ -349,7 +349,7 @@ class orderzadmin extends AdminTab
 												$result = $result[0];
 
 												$err = 1;
-												$err &= Db::getInstance()->Execute('insert into '. _DB_PREFIX_.'order_detail (id_order, product_id, product_name, product_quantity, product_quantity_in_stock, product_price, product_ean13 ,product_reference ,product_supplier_reference ,product_weight ,tax_name ,tax_rate )
+												$err &= Db::getInstance()->Execute('insert into '._DB_PREFIX_.'order_detail (id_order, product_id, product_name, product_quantity, product_quantity_in_stock, product_price, product_ean13 ,product_reference ,product_supplier_reference ,product_weight ,tax_name ,tax_rate )
 													values ('.$order->id.','.$result['id_product'].',\''.addslashes($result['name']).'\',1,1,'.
 													$result['price'].',\''.$result['ean13'].'\',\''.addslashes($result['reference']).'\',\''.addslashes($result['supplier_reference']).'\','.$result['weight'].',\''.addslashes($result['tax_name']).'\','.($result['tax_rate']?$result['tax_rate']:0).')'
 												);
@@ -368,18 +368,18 @@ class orderzadmin extends AdminTab
 									}
 									elseif ($_POST['search_txt'])
 									{
-										$sql = "select i.id_image, p.id_product, p.price, pl.name, t.rate from ". _DB_PREFIX_."product p
-											left join ". _DB_PREFIX_."product_lang pl on p.id_product=pl.id_product
-											left join ". _DB_PREFIX_."image i on p.id_product=i.id_product AND i.cover = 1
-											left join ". _DB_PREFIX_."tax t on t.id_tax=p.id_tax
-											right join ". _DB_PREFIX_."lang l on pl.id_lang=l.id_lang AND l.id_lang=".$cookie->id_lang."
+										$sql = "select i.id_image, p.id_product, p.price, pl.name, t.rate from "._DB_PREFIX_."product p
+											left join "._DB_PREFIX_."product_lang pl on p.id_product=pl.id_product
+											left join "._DB_PREFIX_."image i on p.id_product=i.id_product AND i.cover = 1
+											left join "._DB_PREFIX_."tax t on t.id_tax=p.id_tax
+											right join "._DB_PREFIX_."lang l on pl.id_lang=l.id_lang AND l.id_lang=".$cookie->id_lang."
 											where pl.name like '%".$_POST['search_txt']."%' limit 25";
 
 										$ps = Db::getInstance()->ExecuteS($sql);
 
-										foreach($ps as $p)
+										foreach ($ps as $p)
 										{
-											$html.= '
+											$html .= '
 											<tr>
 												<td><img src="'.__PS_BASE_URI__.'img/p/'.intval($p['id_product']).'-'.intval($p['id_image']).'-small.jpg'.'"></td>
 												<td>'.$p['name'].'</td>
@@ -391,7 +391,7 @@ class orderzadmin extends AdminTab
 									}
 									else
 									{
-										$html.= '
+										$html .= '
 											<tr>
 												<td colspan=5><span style="font-style:italic;">'.$this->l('No search results.').'</span></td>
 											</tr>
@@ -400,14 +400,14 @@ class orderzadmin extends AdminTab
 								}
 								else
 								{
-									$html.= '
+									$html .= '
 										<tr>
 											<td colspan=5><span style="font-style:italic;">'.$this->l('No search results.').'</span></td>
 										</tr>
 									';
 								}
 
-							$html.= '
+							$html .= '
 							</table>
 							<br class="clear">
 							<div class="margin-form">
@@ -418,7 +418,7 @@ class orderzadmin extends AdminTab
 			';
 
 			//////////////////////////////////// Products ///////////////////////////////////
-			$html.= '
+			$html .= '
 				<br class="clear">
 				<a name="products"><br /></a>
 				<form action="'.$currentIndex.'&back='.$back.'&updateorder&editProducts&id_order='.$order->id.'&token='.$this->token.'" method="post">
@@ -439,18 +439,18 @@ class orderzadmin extends AdminTab
 								foreach ($products as $k => $product)
 								{
 									$image = array();
-									if (isset($product['product_attribute_id']) AND intval($product['product_attribute_id']))
+									if (isset($product['product_attribute_id']) && intval($product['product_attribute_id']))
 										$image = Db::getInstance()->getRow('
 											SELECT id_image
 											FROM '._DB_PREFIX_.'product_attribute_image
 											WHERE id_product_attribute = '.intval($product['product_attribute_id'])
-									);
-									if (!isset($image['id_image']) OR !$image['id_image'])
+										);
+									if (!isset($image['id_image']) || !$image['id_image'])
 										$image = Db::getInstance()->getRow('
 											SELECT id_image
 											FROM '._DB_PREFIX_.'image
 											WHERE id_product = '.intval($product['product_id']).' AND cover = 1'
-									);
+										);
 									$stock = Db::getInstance()->getRow('
 										SELECT '.($product['product_attribute_id'] ? 'pa' : 'p').'.quantity
 										FROM '._DB_PREFIX_.'product p
@@ -483,34 +483,34 @@ class orderzadmin extends AdminTab
 									$c_decimals = (is_array($currency) ? intval($currency['decimals']) : intval($currency->decimals)) * _PS_PRICE_DISPLAY_PRECISION_;
 									if ($product['product_quantity'] > $product['customizationQuantityTotal'])
 									{
-										$html.= '
-										<tr'.((isset($image['id_image']) AND isset($products[$k]['image_size'])) ? ' height="'.($products[$k]['image_size'][1] + 7).'"' : '').'>
+										$html .= '
+										<tr'.((isset($image['id_image']) && isset($products[$k]['image_size'])) ? ' height="'.($products[$k]['image_size'][1] + 7).'"' : '').'>
 											<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
 											'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 											<td><input type="text" onkeyup="check_pname(this.value);" size="54" name="product_name['.intval($product['id_order_detail']).']" value="'.stripslashes($product['product_name']).'"><br /></td>
 											<td align="center"><input type="text" onkeyup="check_price(this.value);" size="8" name="product_price['.intval($product['id_order_detail']).']" value="'.$this->ps_round($product['product_price'], $c_decimals).'">('.$currency->sign.')</td>
-											<td align="center" class="productQuantity"><input type="text" onkeyup="check_qty(this.value, '.($product['product_quantity']+$stock['quantity']).');" size="2" name="product_quantity['.intval($product['id_order_detail']).']" value="'.(intval($product['product_quantity']) - $product['customizationQuantityTotal']).'"></td>
+											<td align="center" class="productQuantity"><input type="text" onkeyup="check_qty(this.value, '.($product['product_quantity'] + $stock['quantity']).');" size="2" name="product_quantity['.intval($product['id_order_detail']).']" value="'.(intval($product['product_quantity']) - $product['customizationQuantityTotal']).'"></td>
 											<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 											<input type="hidden" name="product_stock['.intval($product['id_order_detail']).']" value="'.$product_stock.'">
 											<input type="hidden" name="product_quantity_old['.intval($product['id_order_detail']).']" value="'.$product['product_quantity'].'">
 											<input type="hidden" name="product_tax['.intval($product['id_order_detail']).']" value="'.$product['tax_rate'].'">';
 											if ($product['product_attribute_id'] > 0)
-												$html.= '<input type="hidden" name="product_attribute_id['.intval($product['id_order_detail']).']" value="'.$product['product_attribute_id'].'">';
+												$html .= '<input type="hidden" name="product_attribute_id['.intval($product['id_order_detail']).']" value="'.$product['product_attribute_id'].'">';
 											else
-												$html.= '<input type="hidden" name="product_id['.intval($product['id_order_detail']).']" value="'.$product['product_id'].'">';
-											$html.= '
+												$html .= '<input type="hidden" name="product_id['.intval($product['id_order_detail']).']" value="'.$product['product_id'].'">';
+											$html .= '
 											<td align="center">'.Tools::displayPrice(($this->getTaxCalculationMethod($order->id_customer) == PS_TAX_EXC ? $product['product_price'] : $this->ps_round($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 											<td align="center"><input type="checkbox" name="product_delete['.intval($product['id_order_detail']).']"></td>
 										</tr>';
 									}
 								}
-							$html.= '
+							$html .= '
 							</table>
 							<br>
 							<div class="margin-form">
 								<input type="submit" value="'.$this->l('Save').'" name="editProducts" class="button" />
 							</div>';
-							$html.= '
+							$html .= '
 						</div>
 					</fieldset>
 				</form>
@@ -518,7 +518,7 @@ class orderzadmin extends AdminTab
 			';
 
 			/////////////////////////////////// Module block //////////////////////////////////////////
-			$html.= '
+			$html .= '
 				<fieldset style="font-size: 0.9em; width: 886px; padding: 4px;">
 					<div>
 						<b>'.$this->l('Module info').':</b> '.
@@ -538,10 +538,10 @@ class orderzadmin extends AdminTab
 		}
 		else
 		{
-			$html.= ' / '.$this->l('Orders list').'</h2>';
+			$html .= ' / '.$this->l('Orders list').'</h2>';
 			echo $html;
 
-			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : null, !Tools::getValue($this->table.'Orderway') ? 'DESC' : null);
 			$this->displayList();
 		}
 	}
