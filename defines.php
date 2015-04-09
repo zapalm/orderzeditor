@@ -2,11 +2,11 @@
 /**
  * Orders Editor 1.0: module for PrestaShop 1.2-1.3
  *
- * @author zapalm <zapalm@ya.ru>
- * @copyright (c) 2010-2014, zapalm
- * @link http://prestashop.modulez.ru/en/administrative-tools/26-free-orders-editor-module-for-prestashop.html The module's homepage
- * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
- * @version 1.0
+ * @author    zapalm <zapalm@ya.ru>
+ * @copyright 2010-2015 zapalm
+ * @link      http://prestashop.modulez.ru/en/administrative-tools/26-free-orders-editor-module-for-prestashop.html The module's homepage
+ * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ * @version   1.0
  */
 
 if (!defined('_PS_VERSION_'))
